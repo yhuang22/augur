@@ -244,6 +244,8 @@ export default class AugurAPI {
       Timeseries(repo, 'openIssues', 'issues')
       Timeseries(repo, 'pullRequestComments', 'pulls/comments')
       Timeseries(repo, 'pullRequestsOpen', 'pulls')
+      Timeseries(repo, 'pullsNumber', 'pulls/number')
+      Timeseries(repo, 'pullAge', 'pulls/age' )
 
       // RISK
 
@@ -255,6 +257,7 @@ export default class AugurAPI {
       Timeseries(repo, 'watchers', 'watchers')
 
       // EXPERIMENTAL
+      Endpoint(repo, 'contributorsGender', 'contributors_gender')
 
       // Commit Related
       Timeseries(repo, 'commits100', 'commits100')

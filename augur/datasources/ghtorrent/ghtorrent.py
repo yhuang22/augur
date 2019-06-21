@@ -478,6 +478,52 @@ class GHTorrent(object):
             GROUP BY YEARWEEK(DATE(pull_request_history.created_at))
         """)
         return pd.read_sql(pullsSQL, self.db, params={"repoid": str(repoid)})
+    
+    @annotate(tag='pull-requests-number')
+    def pull_requests_number(self, owner, repo=None):
+        """
+        Timeseries of the number of pull requests
+
+        :param owner: The name of the project owner or the id of the project in the projects table. Use repoid() to get this.
+        :param repo: The name of the repo. Unneeded if repository id was passed as owner.
+        :return: DataFrame with number of pull request/week
+        """
+        repoid = self.repoid(owner, repo)
+        pullRequestNumberSQL = s.sql.text(self.single_table_count_by_date("pull_requests", "pullreq_id", "pull_request_id", group_by="week"))
+        return pd.read_sql(pullRequestNumberSQL, self.db, params={"repoid": str(repoid)})
+
+    @annotate(tag='age-pull-request')
+    def age_pull_request(self, owner, repo=None):
+        """
+        Timeseries of average age of pull requests
+
+        :param owner: The name of the project owner or the id of the project in the projects table. Use repoid() to get this.
+        :param repo: The name of the repo. Unneeded if repository id was passed as owner.
+        :return: DataFrame with average age of pull requests/week??
+        """
+        repoid = self.repoid(owner, repo)
+        ageSQL = s.sql.text("""
+            SELECT DATEDIFF(day, DATE(pull_request_history.created_at) AS "date_opened", DATE(closed_on) AS "date_closed") AS DATEDIFF
+               FROM 
+                   (SELECT DATE(pull_request_history.created_at) AS "date_opened"
+                    FROM pull_request_history
+                    INNER JOIN pull_requests 
+                    ON pull_request_history.pull_request_id = pull_requests.id
+                    WHERE pull_request_history.action = 'opened' AND pull_requests.base_repo_id = :repoid
+                    GROUP BY pull_request_history.pull_request_id) AS "date_opened"
+                JOIN
+                   (SELECT DATE(closed_on) AS "date_closed"
+                    FROM pull_request_history
+                    INNER JOIN pull_requests
+                    ON pull_request_history.pull_request_id = pull_requests.id
+                    WHERE pull_request_history.action = 'closed' AND pull_requests.base_repo_id = :repoid
+                    GROUP BY pull_request_history.pull_request_id) AS "date_closed"
+                ON open.pull_requests.id = closed.pull_requests.id
+        """)
+        return pd.read_sql(ageSQL, self.db, params={"repoid": str(repoid)})
+
+
+        
 
     #####################################
     ###            RISK               ###

@@ -114,7 +114,7 @@
       <div class="col col-6">
         <dynamic-line-chart source="pullRequestComments"
                     title="Pull Request Comments / Week "
-                    cite-url="https://github.com/augurlabs/wg-gmd/blob/master/activity-metrics/pull-request-comments.md"
+                    cite-url="https://github.com/augurlabs/metrics/blob/master/activity-metrics/pull-request-comments.md"
                     cite-text="Pull Request Comments">
         </dynamic-line-chart>
       </div>
@@ -134,6 +134,22 @@
                       cite-url="https://github.com/chaoss/metrics/blob/master/activity-metrics/contributing-organizations.md"
                       cite-text="Contributing Organizations">
         </bubble-chart>
+      </div>
+
+      <div class="col col-6">
+        <dynamic-line-chart source="pullsNumber"
+                    title="Number of Pull Requests / Week"
+                    cite-url=""
+                    cite-text="Number of Pull Requests">
+        </dynamic-line-chart>
+      </div>
+
+      <div class="col col-6">
+        <dynamic-line-chart source="pullAge"
+                    title="Average Age of Pull Requests"
+                    cite-url=""
+                    cite-text="Age of Pull Requests">
+        </dynamic-line-chart>
       </div>
 
     </div>

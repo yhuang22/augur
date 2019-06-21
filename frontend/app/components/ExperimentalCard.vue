@@ -84,6 +84,14 @@
       </div>
 
       <div class="col col-12">
+        <stacked-bar-chart source="contributorsGender"
+                    title="Gender of Contributors"
+                    cite-url=""
+                    cite-text="Issue Activity">
+        </stacked-bar-chart>
+      </div>
+
+      <div class="col col-12">
         <bubble-chart source="contributors"
                       title="Contributor Overview"
                       size="total"

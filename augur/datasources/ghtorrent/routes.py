@@ -318,6 +318,26 @@ def create_routes(server):
     """
     server.addTimeseries(ghtorrent.pull_requests_open, 'pulls')
 
+    """
+    @api {get} /:owner/:repo/timeseries/pulls-age Number of Pull Requests
+    @apiName number-of-pull-requests
+    @apiGroup Growth-Maturity-Decline
+
+    @apiParam {String} owner Username of the owner of the GitHub repository
+    @apiParam {String} repo Name of the GitHub repository
+    """
+    server.addTimeseries(ghtorrent.pull_requests_number, 'pulls/number')
+
+    """
+    @api {get} /:owner/:repo/timeseries/pulls-age Age of Pull Requests
+    @apiName age-of-pull-requests
+    @apiGroup Growth-Maturity-Decline
+
+    @apiParam {String} owner Username of the owner of the GitHub repository
+    @apiParam {String} repo Name of the GitHub repository
+    """
+    server.addTimeseries(ghtorrent.age_pull_request, 'pulls/age')
+
     #####################################
     ###            RISK               ###
     #####################################

@@ -154,10 +154,10 @@ class GitHubAPI(object):
 
         return df
 
-    @annotate(tag='comments-pull-requests')
-    def num_comments_pull_requests(self, owner, repo):
+    @annotate(tag='num-comments-pull-request')
+    def num_comments_pull_request(self, owner, repo):
         """
-        Timeseries of the count of the number of comments of pull requests per day.
+        Timeseries of the count of the number of comments on a pull request per day.
 
         :param owner: The name of the project owner.
         :param repo: The name of the repo.
@@ -182,7 +182,7 @@ class GitHubAPI(object):
         # paginate through all the review comments
         json1 = []
         for i in list_pr_number:
-            url = "https://api.github.com/repos/{}/{}/pulls/comments/{}"
+            url = "https://api.github.com/repos/{}/{}/pulls/{}/comments/"
             j = requests.get(url.format(owner, repo, i), auth=('user', self.GITHUB_API_KEY)).json()
             
             json1 += j
@@ -196,7 +196,7 @@ class GitHubAPI(object):
 
         return df
     
-    @annotate(tag='pull-requests')
+    @annotate(tag='number-of-pull-requests')
     def number_of_pull_requests(self, owner, repo):        
         """
         Timeseries of number of pull requests per day.
@@ -434,7 +434,7 @@ class GitHubAPI(object):
             else:
                 cursor = data['data']['repository']['tags']['edges'][-1]['cursor']
         return pd.DataFrame(tags_list)
-
+    
     def contributors_gender(self, owner, repo=None):
         contributors = self.api.get_repo((owner + "/" + repo)).get_contributors()
         names = pd.DataFrame(columns=['name'])
@@ -445,6 +445,14 @@ class GitHubAPI(object):
                 i += 1
         genderized = names.merge(LocalCSV.name_gender, how='inner', on=['name'])
         return genderized
+
+    @annotate(tag='count-contributors-gender')
+    def count_contributors_gender(self, owner,repo=None):
+        genderized = self.contributors_gender(owner, repo)
+        df = genderized.groupby('gender').size().reset_index(name='count')
+        print(df.iloc[:3])
+        return df
+        
 
     # def code_reviews(self, owner, repo=None):
     #     """

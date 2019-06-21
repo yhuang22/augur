@@ -2,6 +2,7 @@
 """
 Creates routes for the GitHub API data source plugin
 """
+from flask import request, Response
 
 def create_routes(server):
 
@@ -19,7 +20,8 @@ def create_routes(server):
     @api {get} /:owner/:repo/lines_changed Lines of Code Changed
     @apiName lines-of-code-changed
     @apiGroup Growth-Maturity-Decline
-    @apiDescription <a href="https://github.com/augurlabs/metrics/blob/master/activity-metrics/lines-of-code-changed.md">CHAOSS Metric Definition</a>.  Source: <a href="https://developer.github.com/">GitHub API</a>
+    @apiDescription <a href="https://github.com/augurlabs/metrics/blob/master/activity-metrics/lines-of-code-changed.md">CHAOSS Metric Definition</a>.
+    Source: <a href="https://developer.github.com/">GitHub API</a>
 
     @apiGroup Growth-Maturity-Decline
     @apiParam {String} owner Username of the owner of the GitHub repository
@@ -38,6 +40,23 @@ def create_routes(server):
                         ]
     """
     server.addMetric(github.lines_of_code_changed, 'lines_changed')
+
+
+    """
+    @api {get} /:owner/:repo/pulls/comments{/number} number of comments on a
+    pull request
+    @apiName num-comments-pull-request
+    @apiGroup Growth-Maturity-Decline
+    @apiDescription <a href="https://github.com/augurlabs/metrics/blob/master/activity-metrics/pull-request-comments.md">CHAOSS Metric Definition</a>.
+    Source: <a href="https://developer.github.com/">GitHub API</a>
+    
+    @apiGroup Growth-Maturity-Decline
+    @apiParam {String} owner Username of the owner of the GitHub repository
+    @apiParam {String} repo Name of the GitHub repository
+
+    @apiSuccessExample {json} Success-Response:
+    """
+    server.addTimeseries(github.num_comments_pull_request, 'pull/comments')
 
     #####################################
     ###            RISK               ###
@@ -120,3 +139,5 @@ def create_routes(server):
                         ]
     """
     server.addTimeseries(github.tags, 'tags')
+
+    server.addMetric(github.count_contributors_gender, 'contributors_gender')
