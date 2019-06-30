@@ -83,6 +83,7 @@ class GitHubAPI(object):
         df.columns = ['created_at']
         df['created_at'] = pd.to_datetime(df['created_at']).dt.normalize()
         df = df.groupby('created_at').size().reset_index(name='count')
+        
 
         return df
 
@@ -446,11 +447,23 @@ class GitHubAPI(object):
         genderized = names.merge(LocalCSV.name_gender, how='inner', on=['name'])
         return genderized
 
+
+    def contributors_gender_version_2(self, owner, repo=None):
+        contributors = self.api.get_repo((owner + "/" + repo)).get_contributors()
+        names = pd.DataFrame(columns=['name'])
+        i = 0
+        for contributor in contributors:
+            if contributor.name is not None:
+                names.loc[i] = [contributor.name.split()[0]]
+                i += 1
+        genderized = names.merge(LocalCSV.name_gender, how='left', on=['name'])
+        return genderized
+
     @annotate(tag='count-contributors-gender')
     def count_contributors_gender(self, owner,repo=None):
-        genderized = self.contributors_gender(owner, repo)
+        genderized = self.contributors_gender_version_2(owner, repo)
         df = genderized.groupby('gender').size().reset_index(name='count')
-        print(df.iloc[:3])
+        print(df.iloc[:5])
         return df
         
 

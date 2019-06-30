@@ -83,12 +83,12 @@
         </stacked-bar-chart>
       </div>
 
-      <div class="col col-12">
-        <stacked-bar-chart source="contributorsGender"
+      <div class="col col-6">
+        <bar-graph-chart source="contributorsGender"
                     title="Gender of Contributors"
                     cite-url=""
-                    cite-text="Issue Activity">
-        </stacked-bar-chart>
+                    cite-text="Gender of Contributors">
+        </bar-graph-chart>
       </div>
 
       <div class="col col-12">
@@ -111,6 +111,7 @@ import DynamicLineChart from './charts/DynamicLineChart'
 import BubbleChart from './charts/BubbleChart'
 import StackedBarChart from './charts/StackedBarChart'
 import DualAxisContributions from './charts/DualAxisContributions'
+import BarGraphChart from './charts/BarGraphChart'
 
 module.exports = {
   data() {
@@ -122,7 +123,8 @@ module.exports = {
     DynamicLineChart,
     BubbleChart,
     StackedBarChart,
-    DualAxisContributions
+    DualAxisContributions,
+    BarGraphChart
   }
 }
 
