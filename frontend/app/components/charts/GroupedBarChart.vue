@@ -289,7 +289,7 @@ export default {
       // Get the repos we need
       let repos = []
       if (this.gitRepo) {
-        repos.push(window.Augur.Repo({ gitURL: this.gitRepo }))
+        repos.push(window.AugurAPI.Repo({ gitURL: this.gitRepo }))
       } // end if (this.$store.repo)
 
             /*
